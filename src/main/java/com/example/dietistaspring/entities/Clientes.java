@@ -26,6 +26,10 @@ public class Clientes {
     )
     private List<Dietas> dietas;
 
+    private String nombreUsuario;
+
+    private String password;
+
 
 
 }
