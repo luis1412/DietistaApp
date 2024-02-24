@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface DietistaRepository extends JpaRepository<Dietista, Long> {
     Optional<Dietista> findByUsername(String username);
-
 }
