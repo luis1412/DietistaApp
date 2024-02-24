@@ -1,6 +1,7 @@
 package com.example.dietistaspring.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -33,8 +34,30 @@ public class Dietista {
     private String password;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "dietista", cascade = CascadeType.ALL)
     private List<Dietas> diets;
 
+
+    @ManyToMany
+    @JoinTable(
+            name="dietista_roles",
+            joinColumns = @JoinColumn( name = "dietista_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"dietista_id","role_id" })}
+    )
+    private List<Role>roles;
+
+    private boolean enabled;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private boolean admin;
+
+    @PrePersist
+    public void prePresist()
+    {
+        enabled = true;
+    }
 
 }

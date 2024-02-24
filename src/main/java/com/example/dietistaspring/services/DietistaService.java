@@ -10,7 +10,8 @@ public interface DietistaService {
     List<Dietista> findAll();
     Optional<Dietista> findById(Long id);
     Dietista save (Dietista dietista);
+    /*
     Optional <Dietista> update(Long id, Dietista dietista);
     Optional<Dietista> delete(Long id);
-
+*/
 }
