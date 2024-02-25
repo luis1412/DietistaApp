@@ -39,10 +39,10 @@ public class SpringSecurityConfig{
         return http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/dietista").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dietista/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/clientes/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/clientes/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dietista").hasRole("DADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/alimentos", "/api/alimentos/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/alimentos").hasAnyRole("DADMIN", "DIETISTA")
+                        .requestMatchers(HttpMethod.POST, "/api/alimentos").hasAnyRole("DADMIN","DIETISTA")
                         .requestMatchers(HttpMethod.PUT, "/api/alimentos/{id}").hasAnyRole("DADMIN", "DIETISTA")
                         .requestMatchers(HttpMethod.DELETE, "/api/alimentos/{id}").hasAnyRole("DADMIN", "DIETISTA")
                         .requestMatchers(HttpMethod.GET, "/api/comentarios", "/api/comentarios/{id}").permitAll()

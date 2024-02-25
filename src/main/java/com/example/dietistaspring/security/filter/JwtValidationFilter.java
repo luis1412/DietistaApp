@@ -40,7 +40,7 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
-        String token = header.replace(PREFIX_TOKEN, "").trim();
+        String token = header.replace(PREFIX_TOKEN, "");
 
         try {
 
