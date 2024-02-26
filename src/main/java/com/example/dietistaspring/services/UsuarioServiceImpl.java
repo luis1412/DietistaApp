@@ -1,8 +1,8 @@
 package com.example.dietistaspring.services;
 
-import com.example.dietistaspring.entities.Dietista;
+import com.example.dietistaspring.entities.Usuarios;
 import com.example.dietistaspring.entities.Role;
-import com.example.dietistaspring.repositories.DietistaRepository;
+import com.example.dietistaspring.repositories.UsuarioRepository;
 import com.example.dietistaspring.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DietistaServiceImpl implements DietistaService{
+public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
-    private DietistaRepository dietistaRepository;
+    private UsuarioRepository usuarioRepository;
 
 
     @Autowired
@@ -27,29 +27,29 @@ public class DietistaServiceImpl implements DietistaService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Dietista> findAll() {
-        return dietistaRepository.findAll();
+    public List<Usuarios> findAll() {
+        return usuarioRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Dietista> findById(Long id) {
-        return dietistaRepository.findById(id);
+    public Optional<Usuarios> findById(Long id) {
+        return usuarioRepository.findById(id);
     }
 
     @Override
-    public Dietista save(Dietista dietista) {
+    public Usuarios save(Usuarios usuarios) {
         Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_DIETISTA");
         List <Role> roles = new ArrayList<>();
         optionalRoleUser.ifPresent(roles::add);
-        if(dietista.isAdmin()){
+        if(usuarios.isAdmin()){
             Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_DADMIN");
             optionalRoleAdmin.ifPresent(roles::add);
         }
-        dietista.setRoles(roles);
-        dietista.setPassword(passwordEncoder.encode(dietista.getPassword()));
+        usuarios.setRoles(roles);
+        usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
 
-        return dietistaRepository.save(dietista);
+        return usuarioRepository.save(usuarios);
     }
 
 

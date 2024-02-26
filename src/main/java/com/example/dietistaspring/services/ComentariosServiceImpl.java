@@ -44,8 +44,7 @@ public class ComentariosServiceImpl implements ComentariosService {
             comentariosDb.setContenidoComentario(comentarios.getContenidoComentario());
             comentariosDb.setFechaComentario(comentarios.getFechaComentario());
             comentariosDb.setTitulo(comentarios.getTitulo());
-            comentariosDb.setDietista(comentarios.getDietista());
-            comentariosDb.setCliente(comentarios.getCliente());
+            comentariosDb.setUsuarios(comentarios.getUsuarios());
             return Optional.of(comentariosRepository.save(comentariosDb));
         }
         return comentariosOptional;

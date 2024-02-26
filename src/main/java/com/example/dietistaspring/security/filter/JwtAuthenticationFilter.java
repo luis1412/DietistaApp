@@ -1,6 +1,6 @@
 package com.example.dietistaspring.security.filter;
 
-import com.example.dietistaspring.entities.Dietista;
+import com.example.dietistaspring.entities.Usuarios;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,14 +34,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        Dietista dietista = null;
+        Usuarios usuarios = null;
         String username = null;
         String password = null;
 
         try {
-            dietista = new ObjectMapper().readValue(request.getInputStream(), Dietista.class);
-            username = dietista.getUsername();
-            password = dietista.getPassword();
+            usuarios = new ObjectMapper().readValue(request.getInputStream(), Usuarios.class);
+            username = usuarios.getUsername();
+            password = usuarios.getPassword();
         } catch (StreamReadException e) {
             e.printStackTrace();
         } catch (DatabindException e) {

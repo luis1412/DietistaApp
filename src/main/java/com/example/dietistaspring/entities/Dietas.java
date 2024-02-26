@@ -1,5 +1,6 @@
 package com.example.dietistaspring.entities;
-
+import com.example.dietistaspring.entities.Alimentos;
+import com.example.dietistaspring.entities.Usuarios;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +23,10 @@ public class Dietas {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "dietista_id")
-    @Schema(description = "Dietista asignado a la dieta", example = "1")
+    @JoinColumn(name = "usuario_id")
+    @Schema(description = "usuario asignado a la dieta", example = "1")
     @NotNull
-    private Dietista dietista;
+    private Usuarios usuarios;
 
 
     @ManyToMany

@@ -1,7 +1,7 @@
 package com.example.dietistaspring.services;
 
-import com.example.dietistaspring.entities.Dietista;
-import com.example.dietistaspring.repositories.DietistaRepository;
+import com.example.dietistaspring.entities.Usuarios;
+import com.example.dietistaspring.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,25 +19,25 @@ import java.util.stream.Collectors;
 public class JpaDietistaDetailsService implements UserDetailsService {
 
     @Autowired
-    private DietistaRepository dietistaRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Dietista> userOptional = dietistaRepository.findByUsername(username);
+        Optional<Usuarios> userOptional = usuarioRepository.findByUsername(username);
 
         if(userOptional.isEmpty()){
             throw new UsernameNotFoundException((String.format("Username %s no existe", username)));
         }
-        Dietista dietista = userOptional.orElseThrow();
+        Usuarios usuarios = userOptional.orElseThrow();
 
-        List<GrantedAuthority> authorities = dietista.getRoles().stream()
+        List<GrantedAuthority> authorities = usuarios.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        return new org.springframework.security.core.userdetails.User(dietista.getUsername(),
-                dietista.getPassword(),
-                dietista.isEnabled(),
+        return new org.springframework.security.core.userdetails.User(usuarios.getUsername(),
+                usuarios.getPassword(),
+                usuarios.isEnabled(),
                 true,
                 true,
                 true,

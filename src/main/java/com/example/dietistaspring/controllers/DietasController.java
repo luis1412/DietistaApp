@@ -1,18 +1,20 @@
 package com.example.dietistaspring.controllers;
 
 
+import com.example.dietistaspring.entities.Alimentos;
 import com.example.dietistaspring.entities.Dietas;
+import com.example.dietistaspring.services.AlimentosService;
 import com.example.dietistaspring.services.DietasService;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import org.apache.coyote.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ public class DietasController {
 
     @Autowired
     private DietasService dietasService;
+
+    @Autowired
+    private AlimentosService alimentosService;
 
 
     @Operation(summary = "Obtener todas las dietas", description = "Devuelve una lista de todas las dietas")
@@ -44,15 +49,16 @@ public class DietasController {
     @Operation(summary = "Crear una nueva dieta", description = "Crea una nueva dieta")
     @ApiResponse(responseCode = "201", description = "Dieta creada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @PostMapping
-    public ResponseEntity<Dietas> create(@RequestBody Dietas product){
-        return ResponseEntity.status(HttpStatus.CREATED).body(dietasService.save(product));
+    public ResponseEntity<Dietas> create(@RequestBody Dietas dietas){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(dietasService.save(dietas));
     }
 
     @Operation(summary = "Actualizar una dieta por su ID", description = "Actualiza una dieta existente por su ID")
     @ApiResponse(responseCode = "200", description = "Dieta actualizada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @PutMapping("/{id}")
-    public ResponseEntity<Dietas> update(@PathVariable Long id, @RequestBody Dietas product){
-        Optional <Dietas> productOptional = dietasService.update(id, product);
+    public ResponseEntity<Dietas> update(@PathVariable Long id, @RequestBody Dietas dietas){
+        Optional <Dietas> productOptional = dietasService.update(id, dietas);
         if(productOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
         }

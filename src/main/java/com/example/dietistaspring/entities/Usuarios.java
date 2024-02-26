@@ -1,6 +1,5 @@
 package com.example.dietistaspring.entities;
-
-
+import com.example.dietistaspring.entities.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,14 +14,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "dietista")
+@Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Dietista {
+public class Usuarios {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Schema(description = "ID del dietista", example = "1")
+    @Schema(description = "ID del usuario", example = "1")
     private Long id;
 
 
@@ -30,34 +29,34 @@ public class Dietista {
     @NotBlank
     @NotNull
     @Size(min = 4, max = 16)
-    @Schema(description = "Nombre de usuario del dietista", example = "johndoe")
+    @Schema(description = "Nombre de usuario", example = "johndoe")
     private String username;
 
     @NotBlank
     @NotNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Size(min = 4, max = 100)
-    @Schema(description = "Contraseña del dietista", example = "hola123")
+    @Schema(description = "Contraseña del usuario", example = "hola123")
     private String password;
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "dietista", cascade = CascadeType.ALL)
-    @Schema(description = "Lista de dietas asociadas al dietista")
-    private List<Dietas> diets;
+    @OneToMany(mappedBy = "", cascade = CascadeType.ALL)
+    @Schema(description = "Lista de dietas asociadas al usuario")
+    private List<Usuarios> diets;
 
 
     @ManyToMany
     @JoinTable(
-            name="dietista_roles",
-            joinColumns = @JoinColumn( name = "dietista_id"),
+            name="usuario_roles",
+            joinColumns = @JoinColumn( name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"),
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"dietista_id","role_id" })}
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","role_id" })}
     )
-    @Schema(description = "Lista de roles del dietista")
+    @Schema(description = "Lista de roles del usuario")
     private List<Role>roles;
 
-    @Schema(description = "Indica si el dietista está habilitado", example = "true")
+    @Schema(description = "Indica si el usuario está habilitado", example = "true")
 
     private boolean enabled;
 

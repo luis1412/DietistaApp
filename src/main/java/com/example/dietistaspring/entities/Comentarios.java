@@ -29,13 +29,12 @@ public class Comentarios {
     @Schema(description = "Fecha del comentario", example = "2024-02-26")
     @NotNull
     private LocalDate fechaComentario;
-    @Schema(description = "Cliente que realizó el comentario", example = "1")
-    @ManyToOne
-    @NotNull
-    private Clientes cliente;
     @Schema(description = "Dietista al que se le hace el comentario", example = "1")
     @ManyToOne
     @NotNull
-    private Dietista dietista;
+    private Usuarios usuarios;
+    @NotNull
+    @ManyToOne
+    private Usuarios usuariosDestinatario;
 
 }
