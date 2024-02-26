@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/dietista")
+@RequestMapping("/api/dietista")
 public class DietistaController {
 
 

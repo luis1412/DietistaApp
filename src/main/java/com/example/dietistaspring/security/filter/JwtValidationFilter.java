@@ -1,6 +1,5 @@
 package com.example.dietistaspring.security.filter;
 
-import com.example.dietistaspring.entities.Dietista;
 import com.example.dietistaspring.security.SimpleGrantedAuthorityJsonCreator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import static com.example.dietistaspring.security.TokenJwtConfig.*;
 import java.io.IOException;
@@ -52,9 +50,9 @@ public class JwtValidationFilter extends BasicAuthenticationFilter {
 
             Collection<? extends GrantedAuthority> authorities = Arrays.asList(
                     new ObjectMapper()
-                            .addMixIn(SimpleGrantedAuthority.class,
+                     .addMixIn(SimpleGrantedAuthority.class,
                                     SimpleGrantedAuthorityJsonCreator.class)
-                            .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
+                     .readValue(authoritiesClaims.toString().getBytes(), SimpleGrantedAuthority[].class)
             );
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
