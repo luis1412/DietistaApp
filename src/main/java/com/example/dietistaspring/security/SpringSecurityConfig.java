@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 
 @Configuration
-public class SpringSecurityConfig{
+public class SpringSecurityConfig {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
@@ -33,11 +33,12 @@ public class SpringSecurityConfig{
     }
 
 
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         return http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/dietista").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()                    .requestMatchers(HttpMethod.GET, "/api/dietista").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dietista/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/clientes/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/dietista").hasRole("DADMIN")

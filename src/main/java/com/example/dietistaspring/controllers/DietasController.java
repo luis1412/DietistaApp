@@ -3,6 +3,10 @@ package com.example.dietistaspring.controllers;
 
 import com.example.dietistaspring.entities.Dietas;
 import com.example.dietistaspring.services.DietasService;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,15 +18,20 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/dietas")
+@Tag(name = "Dietas", description = "Dietas API REST con Operaciones CRUD")
 public class DietasController {
 
     @Autowired
     private DietasService dietasService;
 
 
+    @Operation(summary = "Obtener todas las dietas", description = "Devuelve una lista de todas las dietas")
+    @ApiResponse(responseCode = "200", description = "Lista de dietas encontradas", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @GetMapping
     public List<Dietas> list(){return dietasService.findAll(); }
 
+    @Operation(summary = "Obtener la dieta correspondiente al id", description = "Devuelve una dieta")
+    @ApiResponse(responseCode = "200", description = "Dieta encontrada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @GetMapping("/{id}")
     public ResponseEntity<Dietas> view(@PathVariable Long id){
         Optional<Dietas> productOptional = dietasService.findById(id);
@@ -32,11 +41,15 @@ public class DietasController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Crear una nueva dieta", description = "Crea una nueva dieta")
+    @ApiResponse(responseCode = "201", description = "Dieta creada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @PostMapping
     public ResponseEntity<Dietas> create(@RequestBody Dietas product){
         return ResponseEntity.status(HttpStatus.CREATED).body(dietasService.save(product));
     }
 
+    @Operation(summary = "Actualizar una dieta por su ID", description = "Actualiza una dieta existente por su ID")
+    @ApiResponse(responseCode = "200", description = "Dieta actualizada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @PutMapping("/{id}")
     public ResponseEntity<Dietas> update(@PathVariable Long id, @RequestBody Dietas product){
         Optional <Dietas> productOptional = dietasService.update(id, product);
@@ -46,6 +59,8 @@ public class DietasController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Eliminar una dieta por su ID", description = "Elimina una dieta existente por su ID")
+    @ApiResponse(responseCode = "200", description = "Dieta eliminada", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
     @DeleteMapping("/{id}")
     public ResponseEntity<Dietas> delete(@PathVariable Long id){
         Optional<Dietas> productOptional = dietasService.delete(id);
