@@ -14,7 +14,6 @@ public interface DietasService {
 
     Optional<Dietas> findById(Long id);
 
-
     Optional <Dietas> update(Long id, Dietas dietas);
     Optional<Dietas> delete(Long id);
 

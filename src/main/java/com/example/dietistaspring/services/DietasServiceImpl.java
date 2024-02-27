@@ -36,17 +36,22 @@ public class DietasServiceImpl implements DietasService{
 
     @Override
     public Optional<Dietas> update(Long id, Dietas dietas) {
-        return Optional.empty();
+        Optional <Dietas> dietasOptional = dietasRepository.findById(id);
+        if(dietasOptional.isPresent()){
+            Dietas dietasDb = dietasOptional.orElseThrow();
+            dietasDb.setAlimentos(dietas.getAlimentos());
+            dietasDb.setFechaCreacion(dietas.getFechaCreacion());
+            dietasDb.setUsuarios(dietas.getUsuarios());
+            return Optional.of(dietasRepository.save(dietasDb));
+        }
+        return dietasOptional;
     }
-
-
     @Override
     public Optional<Dietas> delete(Long id) {
         Optional <Dietas> dietaOptional = dietasRepository.findById(id);
         dietaOptional.ifPresent( dietas -> dietasRepository.delete(dietas));
         return dietaOptional;
     }
-
     @Override
     public List<Dietas> findDietasByTotalCaloriasBetween(Long minCalorias, Long maxCalorias) {
         return dietasRepository.findDietasByTotalCaloriasBetween(minCalorias, maxCalorias);

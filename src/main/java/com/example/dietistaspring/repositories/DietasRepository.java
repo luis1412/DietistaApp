@@ -1,5 +1,6 @@
 package com.example.dietistaspring.repositories;
 
+import com.example.dietistaspring.entities.Alimentos;
 import com.example.dietistaspring.entities.Dietas;
 import com.example.dietistaspring.entities.Usuarios;
 import org.springframework.data.jpa.repository.JpaRepository;
