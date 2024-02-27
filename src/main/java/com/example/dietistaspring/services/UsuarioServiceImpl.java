@@ -38,18 +38,23 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public Usuarios save(Usuarios usuarios) {
-        Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_DIETISTA");
-        List <Role> roles = new ArrayList<>();
-        optionalRoleUser.ifPresent(roles::add);
-        if(usuarios.isAdmin()){
-            Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_DADMIN");
-            optionalRoleAdmin.ifPresent(roles::add);
-        }
-        usuarios.setRoles(roles);
-        usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
+    public Usuarios save(Usuarios usuarios, boolean admin) {
+            Optional<Role> optionalRoleUser = roleRepository.findByName("ROLE_CLIENTE");
+            List<Role> roles = new ArrayList<>();
+            optionalRoleUser.ifPresent(roles::add);
+            if (admin) {
+                Optional<Role> optionalRoleAdmin = roleRepository.findByName("ROLE_DIETISTA");
+                optionalRoleAdmin.ifPresent(roles::add);
+            }
+            usuarios.setRoles(roles);
+            usuarios.setPassword(passwordEncoder.encode(usuarios.getPassword()));
 
-        return usuarioRepository.save(usuarios);
+            return usuarioRepository.save(usuarios);
+    }
+
+    @Override
+    public Optional<Usuarios> findUserByName(String name) {
+        return usuarioRepository.findByUsername(name);
     }
 
 

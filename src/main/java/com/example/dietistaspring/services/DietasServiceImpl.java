@@ -46,4 +46,9 @@ public class DietasServiceImpl implements DietasService{
         dietaOptional.ifPresent( dietas -> dietasRepository.delete(dietas));
         return dietaOptional;
     }
+
+    @Override
+    public List<Dietas> findDietasByTotalCaloriasBetween(Long minCalorias, Long maxCalorias) {
+        return dietasRepository.findDietasByTotalCaloriasBetween(minCalorias, maxCalorias);
+    }
 }

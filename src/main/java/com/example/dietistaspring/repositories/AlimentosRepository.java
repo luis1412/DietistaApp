@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AlimentosRepository extends JpaRepository<Alimentos, Long> {
-
     List<Alimentos> getAlimentosByNombreContains(String name);
     List<Alimentos> getAlimentosByCaloriasBetween(Long numeroCaloriasMin, Long numeroCaloriasMax);
     List<Alimentos> getAlimentosByGrasasBetween(Double numeroCaloriasMin, Double numeroCaloriasMax);

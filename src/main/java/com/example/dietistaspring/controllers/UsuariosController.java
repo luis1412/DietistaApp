@@ -1,4 +1,5 @@
 package com.example.dietistaspring.controllers;
+import com.example.dietistaspring.entities.Role;
 import com.example.dietistaspring.entities.Usuarios;
 import com.example.dietistaspring.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/usuario")
@@ -36,10 +35,16 @@ public class UsuariosController {
     @ApiResponse(responseCode = "201", description = "usuario creado", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Usuarios usuarios, BindingResult result){
+       String username = usuarios.getUsername();
+       Optional<Usuarios> usuario = usuarioService.findUserByName(username);
+
+       if (usuario.isEmpty()){
         if(result.hasFieldErrors()){
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarios));
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarios, usuarios.isAdmin()));
+       }
+        return ResponseEntity.status(HttpStatus.CREATED).body("El usuario ya existe no se puede añadir elige otro nombre de usuario");
     }
 
     @Operation(summary = "Registrar un nuevo usuario", description = "Registra un nuevo usuario")
@@ -48,6 +53,16 @@ public class UsuariosController {
     public ResponseEntity<?> register(@Valid @RequestBody Usuarios usuarios, BindingResult result){
         return create(usuarios, result);
     }
+
+    @Operation(summary = "Registrar un nuevo usuario como dietista", description = "Registra un nuevo dietista")
+    @ApiResponse(responseCode = "201", description = "admin registrado", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<?> registerAdmin(@Valid @RequestBody Usuarios usuarios, BindingResult result){
+        usuarios.setAdmin(true);
+        return create(usuarios, result);
+    }
+
+
 
 
     private ResponseEntity<?> validation(BindingResult result) {

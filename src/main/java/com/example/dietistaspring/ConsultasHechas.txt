@@ -1,0 +1,33 @@
+AÑADIR DIETA CON ALIMENTOS ya creados previamente.
+
+    {
+        "usuarios": {
+            "id": 1
+        },
+        "alimentos": [
+            {
+                "id": 1
+            },
+            {
+                "id": 2
+            },
+            {
+                "id": 3
+            }
+        ],
+        "fechaCreacion": "2024-02-26"
+    }
+
+
+Buscar alimentos con filtros rutas:
+
+localhost:8080/api/alimentos/buscar/nombre?name=donut
+localhost:8080/api/alimentos/busqueda/betweenGrasas?min=900&max=3000
+localhost:8080/api/alimentos/busqueda/betweenCalorias?min=0&max=3000
+localhost:8080/api/alimentos/busqueda/betweenSales?min=0&max=3000
+localhost:8080/api/alimentos/busqueda/betweenHidratos?min=0&max=3000
+
+Buscar dietas por calorias:
+
+localhost:8080/api/dietas/filter/between?min=0&max=40000
+

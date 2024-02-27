@@ -9,6 +9,7 @@ public interface UsuarioService {
 
     List<Usuarios> findAll();
     Optional<Usuarios> findById(Long id);
-    Usuarios save (Usuarios usuarios);
+    Usuarios save (Usuarios usuarios, boolean admin);
+    Optional<Usuarios> findUserByName(String name);
 
 }

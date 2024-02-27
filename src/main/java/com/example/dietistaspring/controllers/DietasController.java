@@ -73,6 +73,14 @@ public class DietasController {
         return ResponseEntity.notFound().build();
     }
 
-
-
+    @Operation(summary = "Obtener todas las dietas que esten entre un rango de calorias", description = "Devuelve una lista de todas las dietas")
+    @ApiResponse(responseCode = "200", description = "Lista de dietas encontradas", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})
+    @GetMapping("/filter/between")
+    public  ResponseEntity<?>  findDietasByTotalCaloriasBetween(@RequestParam Long min, Long max){
+      List<Dietas> dietas = dietasService.findDietasByTotalCaloriasBetween(min, max);
+        if (dietas.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay dietas entre el rango proporcioando de calorias.");
+        }
+        return ResponseEntity.ok(dietas);
+    }
 }

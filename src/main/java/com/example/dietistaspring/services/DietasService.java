@@ -18,4 +18,7 @@ public interface DietasService {
     Optional <Dietas> update(Long id, Dietas dietas);
     Optional<Dietas> delete(Long id);
 
+    List<Dietas> findDietasByTotalCaloriasBetween(Long minCalorias, Long maxCalorias);
+
+
 }
