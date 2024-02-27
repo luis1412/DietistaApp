@@ -58,4 +58,31 @@ public class AlimentosServiceImpl implements AlimentosService{
         productOptional.ifPresent( alimentos -> alimentosRepository.delete(alimentos));
         return productOptional;
     }
+
+    @Override
+    public List<Alimentos> getAlimentosByNombreContains(String name) {
+        return alimentosRepository.getAlimentosByNombreContains(name);
+    }
+
+    @Override
+    public List<Alimentos> getAlimentosByCaloriasBetween(Long numeroCaloriasMin, Long numeroCaloriasMax) {
+        return alimentosRepository.getAlimentosByCaloriasBetween(numeroCaloriasMin, numeroCaloriasMax);
+    }
+
+    @Override
+    public List<Alimentos> getAlimentosByGrasasBetween(Double numeroCaloriasMin, Double numeroCaloriasMax) {
+        return alimentosRepository.getAlimentosByGrasasBetween(numeroCaloriasMin,numeroCaloriasMax);
+    }
+
+    @Override
+    public List<Alimentos> getAlimentosBySalBetween(Double salMin, Double salMax) {
+        return alimentosRepository.getAlimentosBySalBetween(salMin,salMax);
+    }
+
+    @Override
+    public List<Alimentos> getAlimentosByHidratosBetween(Double hidratosMin, Double hidratosMax) {
+        return alimentosRepository.getAlimentosByHidratosBetween(hidratosMin,hidratosMax);
+    }
+
+
 }

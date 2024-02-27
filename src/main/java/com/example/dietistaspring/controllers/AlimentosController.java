@@ -4,7 +4,6 @@ package com.example.dietistaspring.controllers;
 import com.example.dietistaspring.entities.Alimentos;
 import com.example.dietistaspring.services.AlimentosService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +48,7 @@ public class AlimentosController {
         return ResponseEntity.notFound().build();
     }
 
+
     @Operation(summary = "Crear un nuevo alimento", description = "Crea un nuevo alimento en la base de datos")
     @ApiResponse(responseCode = "201", description = "Creado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
     @PostMapping
@@ -83,4 +82,62 @@ public class AlimentosController {
         return ResponseEntity.notFound().build();
     }
 
+
+
+    @Operation(summary = "Buscar uno o varios alimentos que contengan la palabra clave introducida", description = "Buscar uno o varios alimentos que contengan la palabra clave introducida")
+    @ApiResponse(responseCode = "200", description = "Busqueda correcta", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "Alimento no encontrado")
+    @GetMapping("/busqueda/nombre")
+    public ResponseEntity<?> findAlimentosContainsName (@RequestParam String name){
+        List<Alimentos> alimentosList = alimentosService.getAlimentosByNombreContains(name);
+        if (alimentosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ningún alimento coincide con esa descripción");
+        }
+            return ResponseEntity.ok(alimentosList);
+    }
+    @Operation(summary = "Buscar uno o varios alimentos que esten entre los valores proporcionados de calorias")
+    @ApiResponse(responseCode = "200", description = "Busqueda correcta", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "Alimento no encontrado")
+    @GetMapping("/busqueda/betweenCalorias")
+    public ResponseEntity<?> findAlimentosBetweenCalorias (@RequestParam Long min, Long max){
+        List<Alimentos> alimentosList = alimentosService.getAlimentosByCaloriasBetween(min, max);
+        if (alimentosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron alimentos dentro del rango especificado.");
+        }
+        return ResponseEntity.ok(alimentosList);
+    }
+    @Operation(summary = "Buscar uno o varios alimentos que esten entre los valores proporcionados de grasas")
+    @ApiResponse(responseCode = "200", description = "Busqueda correcta", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "Alimento no encontrado")
+    @GetMapping("/busqueda/betweenGrasas")
+    public ResponseEntity<?> findAlimentosBetweenGrasas (@RequestParam Double min, Double max){
+        List<Alimentos> alimentosList = alimentosService.getAlimentosByGrasasBetween(min, max);
+        if (alimentosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron alimentos dentro del rango especificado.");
+        }
+        return ResponseEntity.ok(alimentosList);
+    }
+    @Operation(summary = "Buscar uno o varios alimentos que esten entre los valores proporcionados de hidratos")
+    @ApiResponse(responseCode = "200", description = "Busqueda correcta", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "Alimento no encontrado")
+    @GetMapping("/busqueda/betweenHidratos")
+    public ResponseEntity<?> findAlimentosBetweenHidratos (@RequestParam Double min, Double max){
+        List<Alimentos> alimentosList = alimentosService.getAlimentosByHidratosBetween(min, max);
+        if (alimentosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron alimentos dentro del rango especificado.");
+        }
+        return ResponseEntity.ok(alimentosList);
+    }
+    @Operation(summary = "Buscar uno o varios alimentos que esten entre los valores proporcionados de sales")
+    @ApiResponse(responseCode = "200", description = "Busqueda correcta", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "Alimento no encontrado")
+    @GetMapping("/busqueda/betweenSal")
+    public ResponseEntity<?> findAlimentosBetweenSal (@RequestParam Double min, Double max){
+        List<Alimentos> alimentosList = alimentosService.getAlimentosBySalBetween(min, max);
+        if (alimentosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron alimentos dentro del rango especificado.");
+
+        }
+        return ResponseEntity.ok(alimentosList);
+    }
 }

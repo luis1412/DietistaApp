@@ -11,5 +11,10 @@ public interface AlimentosService {
     Alimentos save (Alimentos alimentos);
     Optional <Alimentos> update(Long id, Alimentos alimentos);
     Optional<Alimentos> delete(Long id);
+    List<Alimentos> getAlimentosByNombreContains(String name);
+    List<Alimentos> getAlimentosByCaloriasBetween(Long numeroCaloriasMin, Long numeroCaloriasMax);
+    List<Alimentos> getAlimentosByGrasasBetween(Double numeroCaloriasMin, Double numeroCaloriasMax);
+    List<Alimentos> getAlimentosBySalBetween(Double salMin, Double salMax);
+    List<Alimentos> getAlimentosByHidratosBetween(Double hidratosMin, Double hidratosMax);
 
 }

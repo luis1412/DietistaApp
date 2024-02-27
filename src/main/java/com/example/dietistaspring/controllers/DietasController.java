@@ -26,9 +26,6 @@ public class DietasController {
     @Autowired
     private DietasService dietasService;
 
-    @Autowired
-    private AlimentosService alimentosService;
-
 
     @Operation(summary = "Obtener todas las dietas", description = "Devuelve una lista de todas las dietas")
     @ApiResponse(responseCode = "200", description = "Lista de dietas encontradas", content = {@io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json")})

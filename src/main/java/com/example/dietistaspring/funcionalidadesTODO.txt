@@ -1,0 +1,9 @@
+Buscar alimentos por su nombre, (contains)
+Buscar alimentos por sus valores nutricionales,
+
+buscar sus dietas dependiendo del total de calorias, dieta para
+adelgazar ganar peso o mantenerse dependiendo de las calorias de cada persona
+
+Buscar usuarios por el username
+
+Probar queryDSL

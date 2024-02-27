@@ -38,11 +38,12 @@ public class SpringSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         return http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()                    .requestMatchers(HttpMethod.GET, "/api/dietista").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuario/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuario").hasRole("DADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/usuario").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/alimentos", "/api/alimentos/{id}").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/alimentos/buscar/**").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
                         .requestMatchers(HttpMethod.POST, "/api/alimentos").hasAnyRole("DADMIN","DIETISTA")
                         .requestMatchers(HttpMethod.PUT, "/api/alimentos/{id}").hasAnyRole("DADMIN", "DIETISTA")
                         .requestMatchers(HttpMethod.DELETE, "/api/alimentos/{id}").hasAnyRole("DADMIN", "DIETISTA")
