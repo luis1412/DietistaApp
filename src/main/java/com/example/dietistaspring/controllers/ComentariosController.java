@@ -90,32 +90,52 @@ public class ComentariosController {
     @ApiResponse(responseCode = "200", description = "Comentario encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Comentarios.class)))
     @ApiResponse(responseCode = "404", description = "Comentario no encontrado")
     @GetMapping("/{id}")
-    public ResponseEntity<Comentarios> view(@PathVariable Long id){
+    public ResponseEntity<?> view(@PathVariable Long id){
         Optional<Comentarios> productOptional = comentariosService.findById(id);
         if(productOptional.isPresent()){
             return ResponseEntity.ok(productOptional.orElseThrow());
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado el comentario con el id proporcionado");
     }
 
 
     @Operation(summary = "Crear un nuevo comentario", description = "Crea un nuevo comentario")
     @ApiResponse(responseCode = "201", description = "Comentario creado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Comentarios.class)))
     @PostMapping
-    public ResponseEntity<Comentarios> create(@RequestBody Comentarios comentarios){
-        return ResponseEntity.status(HttpStatus.CREATED).body(comentariosService.save(comentarios));
+    public ResponseEntity<?> create(@RequestBody Comentarios comentarios){
+        try {
+        Optional<Usuarios> usuario = usuarioService.findById(comentarios.getUsuarios().getId());
+        Optional<Usuarios> usuario2 = usuarioService.findById(comentarios.getUsuariosDestinatario().getId());
+        if (usuario.isPresent() && usuario2.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(comentariosService.save(comentarios));
+        }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado los usuarios proporcionados");
     }
 
     @Operation(summary = "Actualizar un comentario por su ID", description = "Actualiza un comentario existente por su ID")
     @ApiResponse(responseCode = "200", description = "Comentario actualizado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Comentarios.class)))
     @ApiResponse(responseCode = "404", description = "Comentario no encontrado")
     @PutMapping("/{id}")
-    public ResponseEntity<Comentarios> update(@PathVariable Long id, @RequestBody Comentarios comentarios){
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Comentarios comentarios){
         Optional <Comentarios> productOptional = comentariosService.update(id, comentarios);
-        if(productOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
+        try {
+            Optional<Usuarios> usuario = usuarioService.findById(comentarios.getUsuarios().getId());
+            Optional<Usuarios> usuario2 = usuarioService.findById(comentarios.getUsuariosDestinatario().getId());
+            if (usuario.isPresent() && usuario2.isPresent()){
+                if(productOptional.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
+                }
+            }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha encontrado los usuarios proporcionados");
         }
-        return ResponseEntity.notFound().build();
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se ha podido actualizar");
     }
 
     @Operation(summary = "Eliminar un comentario por su ID", description = "Elimina un comentario existente por su ID")
