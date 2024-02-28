@@ -57,5 +57,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findByUsername(name);
     }
 
+    @Override
+    public void delete(Long id) {
+        usuarioRepository.deleteById(id);
+    }
 
 }

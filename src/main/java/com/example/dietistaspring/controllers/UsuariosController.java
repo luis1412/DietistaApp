@@ -1,8 +1,11 @@
 package com.example.dietistaspring.controllers;
+import com.example.dietistaspring.entities.Alimentos;
 import com.example.dietistaspring.entities.Role;
 import com.example.dietistaspring.entities.Usuarios;
 import com.example.dietistaspring.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,14 +38,14 @@ public class UsuariosController {
     @ApiResponse(responseCode = "201", description = "usuario creado", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody Usuarios usuarios, BindingResult result){
-       String username = usuarios.getUsername();
-       Optional<Usuarios> usuario = usuarioService.findUserByName(username);
-       if (usuario.isEmpty()){
-        if(result.hasFieldErrors()){
-            return validation(result);
+        String username = usuarios.getUsername();
+        Optional<Usuarios> usuario = usuarioService.findUserByName(username);
+        if (usuario.isEmpty()){
+            if(result.hasFieldErrors()){
+                return validation(result);
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarios, usuarios.isAdmin()));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuarios, usuarios.isAdmin()));
-       }
         return ResponseEntity.status(HttpStatus.CREATED).body("El usuario ya existe no se puede añadir elige otro nombre de usuario");
     }
     @Operation(summary = "Registrar un nuevo usuario", description = "Registra un nuevo usuario")
@@ -59,6 +62,16 @@ public class UsuariosController {
         return create(usuarios, result);
     }
 
+    @Operation(summary = "Eliminar un Usuario por su ID", description = "Elimina un usuario existente por su ID")
+    @ApiResponse(responseCode = "200", description = "Éxito", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
+    @ApiResponse(responseCode = "404", description = "No encontrado")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        usuarioService.delete(id);
+        return ResponseEntity.ok("Se ha borrado correctamente");
+    }
+
+
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> errors.put(err.getField(), "El campo "+ err.getField()+ " "+ err.getDefaultMessage()));
@@ -69,11 +82,11 @@ public class UsuariosController {
     @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     @GetMapping("/busquedaNombre")
     public ResponseEntity<?> buscarUsuarioNombre(@RequestParam String username){
-       Optional<Usuarios> optionalUsuarios = usuarioService.findUserByName(username);
-       if (optionalUsuarios.isPresent()){
-        return ResponseEntity.ok(optionalUsuarios);
-       }
-       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro ningún usuario que coincida con ese nombre de usuario");
+        Optional<Usuarios> optionalUsuarios = usuarioService.findUserByName(username);
+        if (optionalUsuarios.isPresent()){
+            return ResponseEntity.ok(optionalUsuarios);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro ningún usuario que coincida con ese nombre de usuario");
     }
 
 }

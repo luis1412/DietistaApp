@@ -58,7 +58,7 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/comentarios/{id}").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/dietas", "/api/comentarios/{id}").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/dietas/filter/**", "/api/comentarios/{id}").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
-                        .requestMatchers(HttpMethod.POST, "/api/dietas").hasAnyRole("DADMIN", "DIETISTA")
+                        .requestMatchers(HttpMethod.POST, "/api/dietas").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/dietas/{id}").hasAnyRole("DADMIN", "DIETISTA")
                         .requestMatchers(HttpMethod.DELETE, "/api/dietas/{id}").hasAnyRole("DADMIN", "DIETISTA", "CLIENTE")
                         .anyRequest().authenticated())

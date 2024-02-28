@@ -22,14 +22,14 @@ public class Dietas {
     @Schema(description = "ID de la dieta", example = "1")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "usuario_id")
     @Schema(description = "usuario asignado a la dieta", example = "1")
     @NotNull
     private Usuarios usuarios;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany()
     @JoinTable(name = "dietas_alimentos", joinColumns = @JoinColumn(name = "dieta_id"),
                 inverseJoinColumns = @JoinColumn(name = "alimento_id"),
                     uniqueConstraints = {@UniqueConstraint(columnNames = {"dieta_id","alimento_id"})}

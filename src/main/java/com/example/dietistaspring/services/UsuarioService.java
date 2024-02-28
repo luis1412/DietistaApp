@@ -11,5 +11,6 @@ public interface UsuarioService {
     Optional<Usuarios> findById(Long id);
     Usuarios save (Usuarios usuarios, boolean admin);
     Optional<Usuarios> findUserByName(String name);
+    void delete(Long id);
 
 }
