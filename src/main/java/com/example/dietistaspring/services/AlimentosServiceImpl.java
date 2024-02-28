@@ -53,10 +53,8 @@ public class AlimentosServiceImpl implements AlimentosService{
 
     @Override
     @Transactional
-    public Optional<Alimentos> delete(Long id) {
-        Optional <Alimentos> productOptional = alimentosRepository.findById(id);
-        productOptional.ifPresent( alimentos -> alimentosRepository.delete(alimentos));
-        return productOptional;
+    public void delete(Long id) {
+       alimentosRepository.deleteById(id);
     }
 
     @Override

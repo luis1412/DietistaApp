@@ -10,7 +10,7 @@ public interface AlimentosService {
     Optional<Alimentos> findById(Long id);
     Alimentos save (Alimentos alimentos);
     Optional <Alimentos> update(Long id, Alimentos alimentos);
-    Optional<Alimentos> delete(Long id);
+    void delete(Long id);
     List<Alimentos> getAlimentosByNombreContains(String name);
     List<Alimentos> getAlimentosByCaloriasBetween(Long numeroCaloriasMin, Long numeroCaloriasMax);
     List<Alimentos> getAlimentosByGrasasBetween(Double numeroCaloriasMin, Double numeroCaloriasMax);

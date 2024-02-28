@@ -74,12 +74,9 @@ public class AlimentosController {
     @ApiResponse(responseCode = "200", description = "Éxito", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Alimentos.class)))
     @ApiResponse(responseCode = "404", description = "No encontrado")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Alimentos> delete(@PathVariable Long id){
-        Optional<Alimentos> alimentos = alimentosService.delete(id);
-        if(alimentos.isPresent()){
-            return ResponseEntity.ok(alimentos.orElseThrow());
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        alimentosService.delete(id);
+        return ResponseEntity.ok("Se ha borrado correctamente");
     }
 
 

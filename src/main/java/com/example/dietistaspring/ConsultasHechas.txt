@@ -61,7 +61,7 @@ localhost:8080/api/dietas/filter/between?min=0&max=40000
 
 
 GET
- localhost:8080/api/usuario
+localhost:8080/api/usuario
 localhost:8080/api/alimentos/10
 localhost:8080/login
 
@@ -101,10 +101,22 @@ MODIFICAR COMENTARIO
 }
 
 
+CONSULTA COMENTARIO
 
+Todos los comentarios por fecha:
+localhost:8080/api/comentarios/filter/betweenDate?fechaMin=2024-01-21&fechaMax=2024-01-22
 
+TODOS LOS COMENTARIOS DE UN CLIENTE (SOLO PUEDEN ACCEDER CLIENTES):
 
+localhost:8080/api/comentarios/filter/1/betweenDateClient?fechaMin=2020-01-21&fechaMax=2026-04-22
 
+TODOS LOS COMENTARIOS QUE HA HECHO UN DIETISTA (SOLO PUEDEN ACCEDER LOS ADMINISTRADORES O DIETISTAS):
+
+localhost:8080/api/comentarios/filter/1/betweenDateDietista?fechaMin=2020-01-21&fechaMax=2026-04-22
+
+CONSULTA USUARIOS
+
+localhost:8080/api/usuario/busquedaNombre?username=luis
 
 
 

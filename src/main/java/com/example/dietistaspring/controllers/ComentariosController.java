@@ -2,7 +2,9 @@ package com.example.dietistaspring.controllers;
 
 
 import com.example.dietistaspring.entities.Comentarios;
+import com.example.dietistaspring.entities.Usuarios;
 import com.example.dietistaspring.services.ComentariosService;
+import com.example.dietistaspring.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -11,10 +13,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +30,59 @@ public class ComentariosController {
     @Autowired
     private ComentariosService comentariosService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Operation(summary = "Listar todos los comentarios", description = "Devuelve una lista de todos los comentarios")
     @ApiResponse(responseCode = "200", description = "Lista de comentarios encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
     @GetMapping
     public List<Comentarios> list(){
         return comentariosService.findAll();
+    }
+
+    @Operation(summary = "Listar todos los comentarios", description = "Devuelve una lista de todos los comentarios")
+    @ApiResponse(responseCode = "200", description = "Lista de comentarios encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @ApiResponse(responseCode = "404", description = "Lista de comentarios no encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @GetMapping("/filter/betweenDate")
+    public ResponseEntity<?> comentariosBetweenDate(@RequestParam LocalDate fechaMin, @RequestParam LocalDate fechaMax){
+        List<Comentarios> comentariosList = comentariosService.getComentariosByFechaComentarioBetween(fechaMin, fechaMax);
+        if (comentariosList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron comentarios dentro del rango de fechas especificado.");
+        }
+        return ResponseEntity.ok(comentariosList);
+    }
+
+
+    @Operation(summary = "Listar todos los comentarios", description = "Devuelve una lista de todos los comentarios de un unico usuario")
+    @ApiResponse(responseCode = "200", description = "Lista de comentarios encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @ApiResponse(responseCode = "404", description = "Lista de comentarios no encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @GetMapping("/filter/{id}/betweenDateDietista")
+    public ResponseEntity<?> comentariosBetweenDateDietistaId(@PathVariable Long id, @RequestParam LocalDate fechaMin, @RequestParam LocalDate fechaMax){
+        Optional<Usuarios> usuariosOptional = usuarioService.findById(id);
+        if (usuariosOptional.isPresent()){
+            List<Comentarios> comentariosList = comentariosService.getComentariosByUsuariosAndFechaComentarioBetween(usuariosOptional.get(),fechaMin, fechaMax);
+            if (comentariosList.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron comentarios dentro del rango de fechas especificado, para el Dietista "+ usuariosOptional.get().getUsername());
+            }
+            return ResponseEntity.ok(comentariosList);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el usuario especificado");
+    }
+
+    @Operation(summary = "Listar todos los comentarios", description = "Devuelve una lista de todos los comentarios de un unico usuario")
+    @ApiResponse(responseCode = "200", description = "Lista de comentarios encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @ApiResponse(responseCode = "404", description = "Lista de comentarios no encontrados", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Comentarios.class))))
+    @GetMapping("/filter/{id}/betweenDateClient")
+    public ResponseEntity<?> comentariosBetweenDateClientId(@PathVariable Long id, @RequestParam LocalDate fechaMin, @RequestParam LocalDate fechaMax){
+        Optional<Usuarios> usuariosOptional = usuarioService.findById(id);
+        if (usuariosOptional.isPresent()){
+        List<Comentarios> comentariosList = comentariosService.getComentariosByUsuariosDestinatarioAndFechaComentarioBetween(usuariosOptional.get(),fechaMin, fechaMax);
+            if (comentariosList.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron comentarios dentro del rango de fechas especificado, para el Cliente "+ usuariosOptional.get().getUsername());
+            }
+            return ResponseEntity.ok(comentariosList);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el usuario especificado");
     }
 
 

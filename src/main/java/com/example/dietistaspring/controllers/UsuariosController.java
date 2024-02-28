@@ -37,7 +37,6 @@ public class UsuariosController {
     public ResponseEntity<?> create(@Valid @RequestBody Usuarios usuarios, BindingResult result){
        String username = usuarios.getUsername();
        Optional<Usuarios> usuario = usuarioService.findUserByName(username);
-
        if (usuario.isEmpty()){
         if(result.hasFieldErrors()){
             return validation(result);
@@ -46,14 +45,12 @@ public class UsuariosController {
        }
         return ResponseEntity.status(HttpStatus.CREATED).body("El usuario ya existe no se puede añadir elige otro nombre de usuario");
     }
-
     @Operation(summary = "Registrar un nuevo usuario", description = "Registra un nuevo usuario")
     @ApiResponse(responseCode = "201", description = "usuario registrado", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody Usuarios usuarios, BindingResult result){
         return create(usuarios, result);
     }
-
     @Operation(summary = "Registrar un nuevo usuario como dietista", description = "Registra un nuevo dietista")
     @ApiResponse(responseCode = "201", description = "admin registrado", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
     @PostMapping("/registerAdmin")
@@ -62,12 +59,21 @@ public class UsuariosController {
         return create(usuarios, result);
     }
 
-
-
-
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> errors.put(err.getField(), "El campo "+ err.getField()+ " "+ err.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @Operation(summary = "Listar todos los usuarios", description = "Obtiene una lista de todos los usuarios registrados")
+    @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida", content = @io.swagger.v3.oas.annotations.media.Content(mediaType = "application/json"))
+    @GetMapping("/busquedaNombre")
+    public ResponseEntity<?> buscarUsuarioNombre(@RequestParam String username){
+       Optional<Usuarios> optionalUsuarios = usuarioService.findUserByName(username);
+       if (optionalUsuarios.isPresent()){
+        return ResponseEntity.ok(optionalUsuarios);
+       }
+       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro ningún usuario que coincida con ese nombre de usuario");
+    }
+
 }
